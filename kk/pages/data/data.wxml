@@ -1,0 +1,13 @@
+<!-- <view class="title">
+  <image src="../../picture/data1.png" class="titleimg"></image> 历史数据
+</view>
+<view class="container" wx:for="{{tem}}" wx:key="index">
+  <view class="content">
+    <view class="data">
+      <image src="../../picture/温度.png" class="dataimg"></image>
+      <text>室内温度:{{tem.temp}}%c</text>
+    </view>
+    <view class="data">
+      <image src="../../picture/湿度.png" class="dataimg"></image>
+      <text>室内湿度:{{tem.hump}%RH</text>
+    </view> -->
