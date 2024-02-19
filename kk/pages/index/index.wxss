@@ -59,3 +59,15 @@
 .date-value{
   font-size: 50rpx;
 }
+.footer{
+  margin-top: 15px;
+}
+.footer-btn{
+  margin-bottom: 10px;
+  width: 130px !important;
+  height: 32px;
+  font-size: 15px;
+  line-height: 15px;
+  background-color: rgb(33, 150, 228);
+  color: #fff;
+}

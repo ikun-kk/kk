@@ -1,13 +1,27 @@
-<!-- <view class="title">
+<view class="title">
   <image src="../../picture/data1.png" class="titleimg"></image> 历史数据
 </view>
-<view class="container" wx:for="{{tem}}" wx:key="index">
+<view class="container" wx:for="{{tem}}" wx:for-item="items" wx:key="index">
   <view class="content">
     <view class="data">
       <image src="../../picture/温度.png" class="dataimg"></image>
-      <text>室内温度:{{tem.temp}}%c</text>
+      <text>室内温度:{{items.tempo}}%c</text>
     </view>
     <view class="data">
       <image src="../../picture/湿度.png" class="dataimg"></image>
-      <text>室内湿度:{{tem.hump}%RH</text>
-    </view> -->
+      <text>室内湿度:{{items.hum}}%RH</text>
+    </view>
+    <view class="data">
+      <image src="../../picture/光照度传感器.png" class="dataimg"></image>
+      <text>光照强度:{{items.lx}}Lx</text>
+    </view>
+    <view class="data">
+      <image src="../../picture/灯泡.png" class="dataimg"></image>
+      <text>客厅灯:{{items.led?'开':'关'}}</text>
+    </view>
+    <view class="data">
+      <image src="../../picture/闪光报警器.png" class="dataimg"></image>
+      <text>报警器:{{items.beep?'开':'关'}}</text>
+    </view>
+  </view>
+</view>

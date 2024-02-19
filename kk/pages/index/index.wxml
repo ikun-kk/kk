@@ -1,70 +1,72 @@
 <view class="container">
-<view class="header">
-<view class="one">
-<text>空气质量：优</text>
-<text>深圳市</text>
+  <view class="header">
+    <view class="one">
+      <text>空气质量：优</text>
+      <text>深圳市</text>
+    </view>
+    <view class="two">
+      <text>55</text>
+      <text>阴天</text>
+    </view>
+    <view class="three">
+      <text>空气质量优秀，可以出去玩</text>
+    </view>
+  </view>
+  <view class="body">
+    <view class="body-wrapper">
+      <view class="date">
+        <view class="date-logo">
+          <image src="/picture/温度.png"></image>
+        </view>
+        <view class="date-text">
+          <view class="date-title">温度</view>
+          <view class="date-value">{{tempo}}℃</view>
+        </view>
+      </view>
+      <view class="date">
+        <view class="date-logo">
+          <image src="/picture/湿度.png"></image>
+        </view>
+        <view class="date-text">
+          <view class="date-title">湿度</view>
+          <view class="date-value">{{hum}}%</view>
+        </view>
+      </view>
+    </view>
+    <view class="body-wrapper">
+      <view class="date">
+        <view class="date-logo">
+          <image src="/picture/光照度传感器.png"></image>
+        </view>
+        <view class="date-text">
+          <view class="date-title">光照强度</view>
+          <view class="date-value">{{lx}}Lx</view>
+        </view>
+      </view>
+      <view class="date">
+        <view class="date-logo">
+          <image src="/picture/灯泡.png"></image>
+        </view>
+        <view class="date-text">
+          <view class="date-title">客厅灯</view>
+          <switch color="#3def9" checked="led" bindchange="onledchange"></switch>
+        </view>
+      </view>
+    </view>
+    <view class="body-wrapper">
+      <view class="date">
+        <view class="date-logo">
+          <image src="/picture/闪光报警器.png"></image>
+        </view>
+        <view class="date-text">
+          <view class="date-title">报警器</view>
+          <switch color="#3def9" checked="beep" bindchange="onbeepchange"></switch>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="footer">
+    <button class="footer-btn" bindtap="save">保存数据</button>
+    <button class="footer-btn" bindtap="cancle">清除数据</button>
+  </view>
 </view>
-<view class="two">
-<text>55</text>
-<text>阴天</text>
-</view>
-<view class="three">
-<text>空气质量优秀，可以出去玩</text>
-</view>
-</view>
-<view class="body">
-<view class="body-wrapper">
-<view class="date">
-<view class="date-logo">
-<image src="/picture/温度.png"></image>
-</view>
-<view class="date-text">
-<view class="date-title">温度</view>
-<view class="date-value">{{tempo}}℃</view>
-</view>
-</view>
-<view class="date">
-  <view class="date-logo">
-<image src="/picture/湿度.png"></image>
-</view>
-<view class="date-text">
-<view class="date-title">湿度</view>
-<view class="date-value">{{hum}}%</view>
-</view>
-</view>
-</view>
-<view class="body-wrapper">
-<view class="date">
-<view class="date-logo">
-<image src="/picture/光照度传感器.png"></image>
-</view>
-<view class="date-text">
-<view class="date-title">光照强度</view>
-<view class="date-value">{{lx}}Lx</view>
-</view>
-</view>
-<view class="date">
-  <view class="date-logo">
-<image src="/picture/灯泡.png"></image>
-</view>
-<view class="date-text">
-<view class="date-title">客厅灯</view>
-<switch  color="#3def9" checked="led" bindchange="onledchange"></switch>
-</view>
-</view>
-</view>
-<view class="body-wrapper">
-<view class="date">
-<view class="date-logo">
-<image src="/picture/闪光报警器.png"></image>
-</view>
-<view class="date-text">
-<view class="date-title">报警器</view>
-<switch color="#3def9" checked="beep" bindchange="onbeepchange"></switch>
-</view>
-</view>
-</view>
-</view>
-</view>
-  
-
