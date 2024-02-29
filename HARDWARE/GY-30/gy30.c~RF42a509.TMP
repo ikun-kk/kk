@@ -1,0 +1,170 @@
+#include "gy30.h"
+#include "FreeRTOS.h"
+#include <task.h>
+  //MPU IIC 延时函数
+void GY30_IIC_Delay(void)
+{
+	delay_us(2);
+}
+
+//初始化IIC
+void GY30_IIC_Init(void)
+{					     
+    GPIO_InitTypeDef  GPIO_InitStructure;
+	  RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB,ENABLE);//先使能外设IO PORTC时钟 
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10|GPIO_Pin_11;	 // 端口配置
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP; 		 //推挽输出
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;		 //IO口速度为50MHz
+    GPIO_Init(GPIOB, &GPIO_InitStructure);					 //根据设定参数初始化GPIO 
+
+    GPIO_SetBits(GPIOB,GPIO_Pin_10|GPIO_Pin_11);					
+	  
+}
+//产生IIC起始信号
+void GY30_IIC_Start(void)
+{
+	GY30_SDA_OUT();     //sda线输出
+	GY30_IIC_SDA=1;	  	  
+	GY30_IIC_SCL=1;
+	GY30_IIC_Delay();
+ 	GY30_IIC_SDA=0;//START:when CLK is high,DATA change form high to low 
+	GY30_IIC_Delay();
+	GY30_IIC_SCL=0;//钳住I2C总线，准备发送或接收数据 
+}	  
+//产生IIC停止信号
+void GY30_IIC_Stop(void)
+{
+	GY30_SDA_OUT();//sda线输出
+	GY30_IIC_SCL=0;
+	GY30_IIC_SDA=0;//STOP:when CLK is high DATA change form low to high
+ 	GY30_IIC_Delay();
+	GY30_IIC_SCL=1;  
+	GY30_IIC_SDA=1;//发送I2C总线结束信号
+	GY30_IIC_Delay();							   	
+}
+//等待应答信号到来
+//返回值：1，接收应答失败
+//        0，接收应答成功
+u8 GY30_IIC_Wait_Ack(void)
+{
+	u8 ucErrTime=0;
+	GY30_SDA_IN();      //SDA设置为输入  
+	GY30_IIC_SDA=1;
+	GY30_IIC_Delay();	   
+	GY30_IIC_SCL=1;
+	GY30_IIC_Delay();	 
+	while(GY30_READ_SDA)
+	{
+		
+		ucErrTime++;
+		if(ucErrTime>250)
+		{
+			GY30_IIC_Stop();
+			return 1;
+		}
+	}
+	GY30_IIC_SCL=0;//时钟输出0 	   
+	return 0;  
+} 
+//产生ACK应答
+void GY30_IIC_Ack(void)
+{
+	GY30_IIC_SCL=0;
+	GY30_SDA_OUT();
+	GY30_IIC_SDA=0;
+	GY30_IIC_Delay();
+	GY30_IIC_SCL=1;
+	GY30_IIC_Delay();
+	GY30_IIC_SCL=0;
+}
+//不产生ACK应答		    
+void GY30_IIC_NAck(void)
+{
+	GY30_IIC_SCL=0;
+	GY30_SDA_OUT();
+	GY30_IIC_SDA=1;
+	GY30_IIC_Delay();
+	GY30_IIC_SCL=1;
+	GY30_IIC_Delay();
+	GY30_IIC_SCL=0;
+}	
+
+
+
+//IIC发送一个字节
+//返回从机有无应答
+//1，有应答
+//0，无应答			  
+void GY30_IIC_Send_Byte(u8 txd)
+{                        
+    u8 t;   
+	 GY30_SDA_OUT(); 	    
+   GY30_IIC_SCL=0;//拉低时钟开始数据传输
+    for(t=0;t<8;t++)
+    {              
+        GY30_IIC_SDA=(txd&0x80)>>7;
+        txd<<=1; 	  
+		GY30_IIC_SCL=1;
+		GY30_IIC_Delay(); 
+		GY30_IIC_SCL=0;	
+		GY30_IIC_Delay();
+    }	 
+} 	
+
+
+//读1个字节，ack=1时，发送ACK，ack=0，发送nACK   
+u8 GY30_IIC_Read_Byte(unsigned char ack)
+{
+	unsigned char i,receive=0;
+	GY30_SDA_IN();//SDA设置为输入
+  for(i=0;i<8;i++ )
+	{
+        GY30_IIC_SCL=0; 
+        GY30_IIC_Delay();
+	      GY30_IIC_SCL=1;
+        receive<<=1;
+        if(GY30_READ_SDA)receive++;   
+		    GY30_IIC_Delay(); 
+  }					 
+    if (!ack)
+        GY30_IIC_NAck();//发送nACK
+    else
+        GY30_IIC_Ack(); //发送ACK   
+    return receive;
+}
+
+
+
+void GY30_Send_Cmd(u8 command)  
+{  
+    do{  
+    GY30_IIC_Start();                      //iic开始
+    GY30_IIC_Send_Byte(BHAddWrite);       //写地址  
+    }while(GY30_IIC_Wait_Ack());           //等待响应 
+    GY30_IIC_Send_Byte(command);          //发送命令  
+    GY30_IIC_Wait_Ack();                   //等待响应 
+    GY30_IIC_Stop();                       //iic停止  
+}   
+
+
+u16 GY30_Data_Read(void)  
+{  
+    u16 buf;  
+    GY30_IIC_Start();                       //iic开始  
+    GY30_IIC_Send_Byte(BHAddRead);         //发送读地址
+    GY30_IIC_Wait_Ack();                     //等待响应  
+    buf= GY30_IIC_Read_Byte(1);              //读取数据  
+    buf=buf<<8;                        //读取并保存高八位数据
+    buf+=0x00ff& GY30_IIC_Read_Byte(1);      //读取并保存第八位数据
+     GY30_IIC_Stop();                        //发送停止信号
+    return buf;   
+}  
+
+void GY30_Init(void)
+{
+	//GY30_IIC_Init();
+	GY30_Send_Cmd(BHPowOn);    //发送启动信号
+	//GY30_Send_Cmd(BHReset);    //清除寄存器  
+  GY30_Send_Cmd(BHModeH1);   //设置为模式2
+ vTaskDelay(180);           //最高延时180ms
+}
