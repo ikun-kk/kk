@@ -42,6 +42,9 @@ Page({
       that.setData({
         tempo: tem.temp,
         hum: tem.humi,
+        shidu:tem.shidu,
+        lx:tem.Light,
+        CO2:tem.CO2
         //    lx:tem.lengtn
       })
       console.log(tem)
@@ -83,13 +86,13 @@ Page({
     let sw = event.detail.value
     console.log(event.detail.value)
     if (sw) {
-      client.publish('/iot/160/wsy', '{"target":"beep","value":1}', function (err) {
+      client.publish('username', '{"relay":1}', function (err) {
         if (!err) {
           console.log('成功发送指令-开')
         }
       })
     } else {
-      client.publish('/iot/160/wsy', '{"target":"beep","value":0}', function (err) {
+      client.publish('username', '{"relay":0}', function (err) {
         if (!err) {
           console.log('成功发送指令-关')
         }
@@ -97,12 +100,17 @@ Page({
     }
   },
   save:function() {
+    var time= new Date().toJSON().substring(0, 10) + ' ' + new Date().toTimeString().substring(0,8);
     app.globalData.historyData.push({
+      
       tempo: this.data.tempo,
       hum: this.data.hum,
-      lx: this.data.lx,
+      shidu:this.data.shidu,
+      lx:this.data.Light,
+      CO2:this.data.CO2,
       led: this.data.led,
-      beep: this.data.beep
+      beep: this.data.beep,
+      time
     })
     console.log(app.globalData.historyData);
   },

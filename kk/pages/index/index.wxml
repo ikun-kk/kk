@@ -36,6 +36,26 @@
     <view class="body-wrapper">
       <view class="date">
         <view class="date-logo">
+          <image src="/picture/土壤湿度.png"></image>
+        </view>
+        <view class="date-text">
+          <view class="date-title">土壤湿度</view>
+          <view class="date-value">{{shidu}}%</view>
+        </view>
+      </view>
+      <view class="date">
+        <view class="date-logo">
+          <image src="/picture/二氧化碳.png"></image>
+        </view>
+        <view class="date-text">
+          <view class="date-title">CO2浓度</view>
+          <view class="date-value">{{CO2}}ppm</view>
+        </view>
+      </view>
+    </view>
+    <view class="body-wrapper">
+      <view class="date">
+        <view class="date-logo">
           <image src="/picture/光照度传感器.png"></image>
         </view>
         <view class="date-text">
@@ -48,7 +68,7 @@
           <image src="/picture/灯泡.png"></image>
         </view>
         <view class="date-text">
-          <view class="date-title">客厅灯</view>
+          <view class="date-title">光照灯</view>
           <switch color="#3def9" checked="led" bindchange="onledchange"></switch>
         </view>
       </view>
@@ -56,13 +76,14 @@
     <view class="body-wrapper">
       <view class="date">
         <view class="date-logo">
-          <image src="/picture/闪光报警器.png"></image>
+          <image src="/picture/水泵.png"></image>
         </view>
         <view class="date-text">
-          <view class="date-title">报警器</view>
+          <view class="date-title">浇水</view>
           <switch color="#3def9" checked="beep" bindchange="onbeepchange"></switch>
         </view>
       </view>
+      
     </view>
   </view>
   <view class="footer">

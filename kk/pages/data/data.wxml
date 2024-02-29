@@ -12,16 +12,25 @@
       <text>室内湿度:{{items.hum}}%RH</text>
     </view>
     <view class="data">
+      <image src="../../picture/土壤湿度.png" class="dataimg"></image>
+      <text>土壤湿度:{{items.shidu}}%</text>
+    </view>
+    <view class="data">
+      <image src="../../picture/二氧化碳.png" class="dataimg"></image>
+      <text>光照强度:{{items.CO2}}ppm</text>
+    </view>
+    <view class="data">
       <image src="../../picture/光照度传感器.png" class="dataimg"></image>
       <text>光照强度:{{items.lx}}Lx</text>
     </view>
     <view class="data">
       <image src="../../picture/灯泡.png" class="dataimg"></image>
-      <text>客厅灯:{{items.led?'开':'关'}}</text>
+      <text>光照灯:{{items.led?'开':'关'}}</text>
     </view>
     <view class="data">
-      <image src="../../picture/闪光报警器.png" class="dataimg"></image>
-      <text>报警器:{{items.beep?'开':'关'}}</text>
+      <image src="../../picture/水泵.png" class="dataimg"></image>
+      <text>浇水:{{items.beep?'开':'关'}}</text>
     </view>
+    <view class="time">保存时间：{{items.time}}</view>
   </view>
 </view>
