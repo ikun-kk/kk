@@ -65,13 +65,13 @@ Page({
     let sw = event.detail.value
     console.log(event.detail.value)
     if (sw) {
-      client.publish('username', '{"LED_SW":1}', function (err) {
+      client.publish('abc', '{"LED_SW":1}', function (err) {
         if (!err) {
           console.log('成功发送指令-开')
         }
       })
     } else {
-      client.publish('username', '{"LED_SW":0}', function (err) {
+      client.publish('abc', '{"LED_SW":0}', function (err) {
         if (!err) {
           console.log('成功发送指令-关')
         }
@@ -86,13 +86,13 @@ Page({
     let sw = event.detail.value
     console.log(event.detail.value)
     if (sw) {
-      client.publish('username', '{"relay":1}', function (err) {
+      client.publish('abc', '{"relay":1}', function (err) {
         if (!err) {
           console.log('成功发送指令-开')
         }
       })
     } else {
-      client.publish('username', '{"relay":0}', function (err) {
+      client.publish('abc', '{"relay":0}', function (err) {
         if (!err) {
           console.log('成功发送指令-关')
         }
@@ -102,7 +102,6 @@ Page({
   save:function() {
     var time= new Date().toJSON().substring(0, 10) + ' ' + new Date().toTimeString().substring(0,8);
     app.globalData.historyData.push({
-      
       tempo: this.data.tempo,
       hum: this.data.hum,
       shidu:this.data.shidu,
