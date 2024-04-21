@@ -8,23 +8,17 @@
 
 void Dht11_Init(void)
 {
-	GPIO_InitTypeDef GPIO_InitStruct;
-	//开B组时钟和AFIO时钟
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB | RCC_APB2Periph_GPIOF ,ENABLE);	
-	//初始化IO口
+	GPIO_InitTypeDef GPIO_InitStruct;//开B组时钟和AFIO时钟
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB | RCC_APB2Periph_GPIOF ,ENABLE);	//初始化IO口
 	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_0;					//选定管脚0
 	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_Out_PP;			//配置为开漏输出
 	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;			//输出速度为2MHZ
 	GPIO_Init( GPIOB, &GPIO_InitStruct);
-
 	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_Out_OD;			//开漏，这样不用去切换输出输入方向
 	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_10 | GPIO_Pin_11;
 	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(GPIOF, &GPIO_InitStruct);
-	
 	GPIO_WriteBit(GPIOB,  GPIO_Pin_0, Bit_SET);
-	
-							//延时1s越过不稳定状态
 	
 }
 

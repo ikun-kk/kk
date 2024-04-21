@@ -1,7 +1,7 @@
 .\objects\port.o: ..\FreeRTOS\FreeRTOS port\RVDS\ARM_CM3\port.c
 .\objects\port.o: ..\FreeRTOS\include\FreeRTOS.h
-.\objects\port.o: D:\keil5\ARM\ARMCC\Bin\..\include\stddef.h
-.\objects\port.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\port.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+.\objects\port.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\objects\port.o: ..\User\FreeRTOSConfig.h
 .\objects\port.o: ..\User\stm32f10x.h
 .\objects\port.o: ..\CORE\core_cm3.h
@@ -32,7 +32,7 @@
 .\objects\port.o: ..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h
 .\objects\port.o: ..\STM32F10x_FWLib\inc\misc.h
 .\objects\port.o: ..\SYSTEM\usart\usart.h
-.\objects\port.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\port.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\port.o: ..\SYSTEM\sys\sys.h
 .\objects\port.o: ..\FreeRTOS\include\projdefs.h
 .\objects\port.o: ..\FreeRTOS\include\portable.h

@@ -36,7 +36,7 @@
 
 //C库
 #include <string.h>
-#include <stdio.h>
+
 #include "cJSON.h"
 
 
@@ -70,9 +70,9 @@ _Bool OneNet_DevLink(void)
 	
 	_Bool status = 1;
 	
-	UsartPrintf(USART_DEBUG, "OneNet_DevLink\r\n"
-							"PROID: %s,	AUIF: %s,	DEVID:%s\r\n"
-                        , PROID, AUTH_INFO, DEVID);
+	//UsartPrintf(USART_DEBUG, "OneNet_DevLink\r\n"
+							//"PROID: %s,	AUIF: %s,	DEVID:%s\r\n"
+                    //    , PROID, AUTH_INFO, DEVID);
 	
 	if(MQTT_PacketConnect(PROID, AUTH_INFO, DEVID, 256, 0, MQTT_QOS_LEVEL0, NULL, NULL, 0, &mqttPacket) == 0)
 	{
@@ -155,7 +155,7 @@ void OneNet_Publish(const char *topic, const char *msg)
 
 	MQTT_PACKET_STRUCTURE mqttPacket = {NULL, 0, 0, 0};							//协议包
 	
-	UsartPrintf(USART_DEBUG, "Publish Topic: %s, Msg: %s\r\n", topic, msg);
+	//UsartPrintf(USART_DEBUG, "Publish Topic: %s, Msg: %s\r\n", topic, msg);
 	
 	if(MQTT_PacketPublish(MQTT_PUBLISH_ID, topic, msg, strlen(msg), MQTT_QOS_LEVEL0, 0, 1, &mqttPacket) == 0)
 	{
@@ -206,7 +206,7 @@ void OneNet_RevPro(unsigned char *cmd)
 			result = MQTT_UnPacketCmd(cmd, &cmdid_topic, &req_payload, &req_len);	//解出topic和消息体
 			if(result == 0)
 			{
-				UsartPrintf(USART_DEBUG, "cmdid: %s, req: %s, req_len: %d\r\n", cmdid_topic, req_payload, req_len);
+				//UsartPrintf(USART_DEBUG, "cmdid: %s, req: %s, req_len: %d\r\n", cmdid_topic, req_payload, req_len);
 				
 				//if(MQTT_PacketCmdResp(cmdid_topic, req_payload, &mqttPacket) == 0)	//命令回复组包
 				//{
@@ -224,8 +224,8 @@ void OneNet_RevPro(unsigned char *cmd)
 			result = MQTT_UnPacketPublish(cmd, &cmdid_topic, &topic_len, &req_payload, &req_len, &qos, &pkt_id);
 			if(result == 0)
 			{
-				UsartPrintf(USART_DEBUG, "topic: %s, topic_len: %d, payload: %s, payload_len: %d\r\n",
-																	cmdid_topic, topic_len, req_payload, req_len);
+				//UsartPrintf(USART_DEBUG, "topic: %s, topic_len: %d, payload: %s, payload_len: %d\r\n",
+																//	cmdid_topic, topic_len, req_payload, req_len);
 								json=cJSON_Parse(req_payload);
 				if(!json)UsartPrintf(USART_DEBUG,"Error before :[%s]\n",cJSON_GetErrorPtr());
 				else

@@ -2,7 +2,7 @@
 .\objects\stm32f10x_it.o: ..\User\stm32f10x_it.h
 .\objects\stm32f10x_it.o: ..\User\stm32f10x.h
 .\objects\stm32f10x_it.o: ..\CORE\core_cm3.h
-.\objects\stm32f10x_it.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\stm32f10x_it.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\objects\stm32f10x_it.o: ..\User\system_stm32f10x.h
 .\objects\stm32f10x_it.o: ..\User\stm32f10x_conf.h
 .\objects\stm32f10x_it.o: ..\STM32F10x_FWLib\inc\stm32f10x_adc.h
@@ -30,10 +30,10 @@
 .\objects\stm32f10x_it.o: ..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h
 .\objects\stm32f10x_it.o: ..\STM32F10x_FWLib\inc\misc.h
 .\objects\stm32f10x_it.o: ..\FreeRTOS\include\FreeRTOS.h
-.\objects\stm32f10x_it.o: D:\keil5\ARM\ARMCC\Bin\..\include\stddef.h
+.\objects\stm32f10x_it.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 .\objects\stm32f10x_it.o: ..\User\FreeRTOSConfig.h
 .\objects\stm32f10x_it.o: ..\SYSTEM\usart\usart.h
-.\objects\stm32f10x_it.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\stm32f10x_it.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\stm32f10x_it.o: ..\SYSTEM\sys\sys.h
 .\objects\stm32f10x_it.o: ..\FreeRTOS\include\projdefs.h
 .\objects\stm32f10x_it.o: ..\FreeRTOS\include\portable.h

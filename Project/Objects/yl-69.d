@@ -3,7 +3,7 @@
 .\objects\yl-69.o: ..\SYSTEM\sys\sys.h
 .\objects\yl-69.o: ..\User\stm32f10x.h
 .\objects\yl-69.o: ..\CORE\core_cm3.h
-.\objects\yl-69.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\yl-69.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\objects\yl-69.o: ..\User\system_stm32f10x.h
 .\objects\yl-69.o: ..\User\stm32f10x_conf.h
 .\objects\yl-69.o: ..\STM32F10x_FWLib\inc\stm32f10x_adc.h

@@ -4,7 +4,7 @@
 .\objects\gy30.o: ..\SYSTEM\sys\sys.h
 .\objects\gy30.o: ..\User\stm32f10x.h
 .\objects\gy30.o: ..\CORE\core_cm3.h
-.\objects\gy30.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\gy30.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\objects\gy30.o: ..\User\system_stm32f10x.h
 .\objects\gy30.o: ..\User\stm32f10x_conf.h
 .\objects\gy30.o: ..\STM32F10x_FWLib\inc\stm32f10x_adc.h
@@ -32,10 +32,10 @@
 .\objects\gy30.o: ..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h
 .\objects\gy30.o: ..\STM32F10x_FWLib\inc\misc.h
 .\objects\gy30.o: ..\FreeRTOS\include\FreeRTOS.h
-.\objects\gy30.o: D:\keil5\ARM\ARMCC\Bin\..\include\stddef.h
+.\objects\gy30.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 .\objects\gy30.o: ..\User\FreeRTOSConfig.h
 .\objects\gy30.o: ..\SYSTEM\usart\usart.h
-.\objects\gy30.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\gy30.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\gy30.o: ..\FreeRTOS\include\projdefs.h
 .\objects\gy30.o: ..\FreeRTOS\include\portable.h
 .\objects\gy30.o: ..\FreeRTOS\include\deprecated_definitions.h

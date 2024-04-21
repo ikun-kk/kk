@@ -36,13 +36,14 @@
 #include "MqttKit.h"
 #include "onenet.h"
 #include "gy30.h"
-#include "gy30.h"
 u8 p[5];/*dht11数组*/
 /*土壤湿度*/
-float temp;
+float temp,light;
 char text[256];
 int shidu;
 int sgp30_dat, CO2Data;
+int  b;
+int light1;
 /**************************** 任务句柄 ********************************/
 /* 
  * 任务句柄是一个指针，用于指向一个任务，当任务创建好之后，它就具有了一个任务句柄
@@ -51,16 +52,22 @@ int sgp30_dat, CO2Data;
  */
  /* 创建任务句柄 */
 static TaskHandle_t AppTaskCreate_Handle = NULL;
-/* LED1任务句柄 */
-static TaskHandle_t LED1_Task_Handle = NULL;
-/* LED2任务句柄 */
-static TaskHandle_t LED2_Task_Handle = NULL;
+/* QT任务句柄 */
+static TaskHandle_t QT_Task_Handle = NULL;
+/* autowater任务句柄 */
+static TaskHandle_t autowater_Task_Handle = NULL;
 /* DHT模块任务句柄 */
 static TaskHandle_t DHT_Task_Handle = NULL;
 /* 继电器模块任务句柄 */
-static TaskHandle_t RELAY_Task_Handle = NULL;
+static TaskHandle_t Light_Task_Handle = NULL;
 /* wifi模块任务句柄 */
 static TaskHandle_t wifi_Task_Handle = NULL;
+/* 土壤湿度任务句柄 */
+static TaskHandle_t shidu_Task_Handle = NULL;
+/* CO2任务句柄 */
+static TaskHandle_t CO2_Task_Handle = NULL;
+
+
 /********************************** 内核对象句柄 *********************************/
 /*
  * 信号量，消息队列，事件标志组，软件定时器这些都属于内核的对象，要想使用这些内核
@@ -87,11 +94,13 @@ static TaskHandle_t wifi_Task_Handle = NULL;
 */
 static void AppTaskCreate(void);/* 用于创建任务 */
 
-static void LED1_Task(void* pvParameters);/* LED1_Task任务实现 */
-static void LED2_Task(void* pvParameters);/* LED2_Task任务实现 */
+static void QT_Task(void* pvParameters);/* QT串口接收任务实现 */
+static void autowater_Task(void* pvParameters);/* 自动加水任务实现 */
 static void DHT_Task(void* pvParameters);/* DHT11任务实现 */
-static void Relays_Task(void* pvParameters);/* 继电器任务实现 */
+static void Light_Task(void* pvParameters);/* 继电器任务实现 */
 static void wifi_Task(void* pvParameters);/* wifi任务实现 */
+static void shidu_Task(void* pvParameters);/* wifi任务实现 */
+static void CO2_Task(void* pvParameters);/* CO2任务实现 */
 static void BSP_Init(void);/* 用于初始化板载相关资源 */
 
 /*****************************************************************
@@ -110,9 +119,9 @@ int main(void)
    /* 创建AppTaskCreate任务 */
   xReturn = xTaskCreate((TaskFunction_t )AppTaskCreate,  /* 任务入口函数 */
                         (const char*    )"AppTaskCreate",/* 任务名字 */
-                        (uint16_t       )512,  /* 任务栈大小 */
+                        (uint16_t       )1024,  /* 任务栈大小 */
                         (void*          )NULL,/* 任务入口函数参数 */
-                        (UBaseType_t    )5, /* 任务的优先级 */
+                        (UBaseType_t    )9, /* 任务的优先级 */
                         (TaskHandle_t*  )&AppTaskCreate_Handle);/* 任务控制块指针 */ 
 
   if(pdPASS == xReturn)
@@ -134,41 +143,50 @@ static void AppTaskCreate(void)
   BaseType_t xReturn = pdPASS;/* 定义一个创建信息返回值，默认为pdPASS */
   taskENTER_CRITICAL();           //进入临界区
   /* 创建LED1_Task任务 */
-  xReturn = xTaskCreate((TaskFunction_t )LED1_Task, /* 任务入口函数 */
-                        (const char*    )"LED1_Task",/* 任务名字 */
+  xReturn = xTaskCreate((TaskFunction_t )QT_Task, /* 任务入口函数 */
+                        (const char*    )"QT_Task",/* 任务名字 */
                         (uint16_t       )512,   /* 任务栈大小 */
                         (void*          )NULL,	/* 任务入口函数参数 */
-                        (UBaseType_t    )2,	    /* 任务的优先级 */
-                        (TaskHandle_t*  )&LED1_Task_Handle);/* 任务控制块指针 */
+                        (UBaseType_t    )7,	    /* 任务的优先级 */
+                        (TaskHandle_t*  )&QT_Task_Handle);/* 任务控制块指针 */
   if(pdPASS == xReturn)
-    printf("创建LED1_Task任务成功!\r\n");
+    printf("创建QT_Task任务成功!\r\n");
 	/* 创建LED2_Task任务 */
-  xReturn = xTaskCreate((TaskFunction_t )LED2_Task, /* 任务入口函数 */
-                        (const char*    )"LED2_Task",/* 任务名字 */
+  xReturn = xTaskCreate((TaskFunction_t )autowater_Task, /* 任务入口函数 */
+                        (const char*    )"autowater_Task",/* 任务名字 */
                         (uint16_t       )512,   /* 任务栈大小 */
                         (void*          )NULL,	/* 任务入口函数参数 */
-                        (UBaseType_t    )2,	    /* 任务的优先级 */
-                        (TaskHandle_t*  )&LED2_Task_Handle);/* 任务控制块指针 */
+                        (UBaseType_t    )6,	    /* 任务的优先级 */
+                        (TaskHandle_t*  )&autowater_Task_Handle);/* 任务控制块指针 */
   if(pdPASS == xReturn)
-    printf("创建LED2_Task任务成功!\r\n");
+    printf("创建autowater_Task任务成功!\r\n");
   /* 创建DHT_Task任务 */
   xReturn = xTaskCreate((TaskFunction_t )DHT_Task, /* 任务入口函数 */
                         (const char*    )"DHT_Task",/* 任务名字 */
                         (uint16_t       )512,   /* 任务栈大小 */
                         (void*          )NULL,	/* 任务入口函数参数 */
-                        (UBaseType_t    )3,	    /* 任务的优先级 */
+                        (UBaseType_t    )5,	    /* 任务的优先级 */
                         (TaskHandle_t*  )&DHT_Task_Handle);/* 任务控制块指针 */
   if(pdPASS == xReturn)
     printf("创建DHT_Task任务成功!\r\n");
-	  /* 创建Relays_Task任务 */
-  xReturn = xTaskCreate((TaskFunction_t )Relays_Task, /* 任务入口函数 */
-                        (const char*    )"Relays_Task",/* 任务名字 */
+	  /* 创建CO2_Task任务 */
+  xReturn = xTaskCreate((TaskFunction_t )CO2_Task, /* 任务入口函数 */
+                        (const char*    )"CO2_Task",/* 任务名字 */
                         (uint16_t       )512,   /* 任务栈大小 */
                         (void*          )NULL,	/* 任务入口函数参数 */
-                        (UBaseType_t    )5,	    /* 任务的优先级 */
-                        (TaskHandle_t*  )&RELAY_Task_Handle);/* 任务控制块指针 */
+                        (UBaseType_t    )4,	    /* 任务的优先级 */
+                        (TaskHandle_t*  )&CO2_Task_Handle);/* 任务控制块指针 */
   if(pdPASS == xReturn)
-    printf("创建Relays_Task任务成功!\r\n");
+    printf("创建CO2_Task任务成功!\r\n");
+	  /* 创建Relays_Task任务 */
+  xReturn = xTaskCreate((TaskFunction_t )Light_Task, /* 任务入口函数 */
+                        (const char*    )"Light_Task",/* 任务名字 */
+                        (uint16_t       )512,   /* 任务栈大小 */
+                        (void*          )NULL,	/* 任务入口函数参数 */
+                        (UBaseType_t    )3,	    /* 任务的优先级 */
+                        (TaskHandle_t*  )&Light_Task_Handle);/* 任务控制块指针 */
+  if(pdPASS == xReturn)
+    printf("创建Light_Task任务成功!\r\n");
 	  /* 创建wifi任务 */
   xReturn = xTaskCreate((TaskFunction_t )wifi_Task, /* 任务入口函数 */
                         (const char*    )"wifi_Task",/* 任务名字 */
@@ -178,7 +196,14 @@ static void AppTaskCreate(void)
                         (TaskHandle_t*  )&wifi_Task_Handle);/* 任务控制块指针 */
   if(pdPASS == xReturn)
     printf("创建wifi任务成功!\r\n");	
-	
+	xReturn = xTaskCreate((TaskFunction_t )shidu_Task, /* 任务入口函数 */
+                        (const char*    )"shidu_Task",/* 任务名字 */
+                        (uint16_t       )512,   /* 任务栈大小 */
+                        (void*          )NULL,	/* 任务入口函数参数 */
+                        (UBaseType_t    )2,	    /* 任务的优先级 */
+                        (TaskHandle_t*  )&shidu_Task_Handle);/* 任务控制块指针 */
+  if(pdPASS == xReturn)
+    printf("创建shidu任务成功!\r\n");	
 	
   vTaskDelete(AppTaskCreate_Handle); //删除AppTaskCreate任务
   
@@ -193,18 +218,22 @@ static void AppTaskCreate(void)
   * @ 参数    ：   
   * @ 返回值  ： 无
   ********************************************************************/
-static void LED1_Task(void* parameter)
-{		vTaskDelay(500);
+static void QT_Task(void* parameter)
+{		
     while (1)
-    {
+    {	vTaskDelay(500);
     	if(USART_RX_STA&0x8000)
 			{			   		
 				if(USART_RX_BUF[0] == 0x00)
 				{
-						relay_off();
-						vTaskDelay(500);
 						relay_on();
 				}
+				else if(USART_RX_BUF[0] == 0x01)
+				{relay_off();}
+				else if(USART_RX_BUF[0] == 0x02)
+				{	LED0=0;}
+				else if(USART_RX_BUF[0] == 0x03)
+				{	LED0=1;}
 				USART_RX_STA=0;
 			}		
     }
@@ -216,11 +245,20 @@ static void LED1_Task(void* parameter)
   * @ 参数    ：   
   * @ 返回值  ： 无
   ********************************************************************/
-static void LED2_Task(void* parameter)
+static void autowater_Task(void* parameter)
 {		vTaskDelay(500);
     while (1)
-    {
+    {	
 			vTaskDelay(1000);
+			b=YL69DO();
+			if(b==1)
+			{	
+				soil_on();
+			}
+			else
+			{
+				soil_off();
+			}
 			
     }
 }
@@ -230,28 +268,39 @@ static void DHT_Task(void* parameter)
     while (1)
     {	vTaskDelay(1000);
 			vTaskDelay(1000);
-      Mcu_Control_Dht11(p);
-		  shidu=Get_Adc_Average(1,10);
+      Mcu_Control_Dht11(p);	
 //		printf("当前温度：%d 当前湿度：%d 土壤湿度：%d\r\n",p[2],p[0],shidu);
 //    printf("#J%dMK%dM\r\n",p[2],p[0]);
     }
 }
-
-static void Relays_Task(void* parameter)
+static void CO2_Task(void* parameter)
 {		
-	  u8 key=0;
+	  
     while (1)
-    {	key=KEY_Scan(0);
-			if(key==KEY_UP_PRESS)	
-			{
-				relay_off();
-				vTaskDelay(5000);
-				relay_on();
-			}	
-				vTaskDelay(20);
+    {	vTaskDelay(1000);
+			SGP30_Write(0x20,0x08);
+			sgp30_dat = SGP30_Read();//读取SGP30的值	
+			CO2Data = (sgp30_dat & 0xffff0000) >> 16;
     }
 }
+static void Light_Task(void* parameter)
+{		
+	  
+    while (1)
+    {	vTaskDelay(1000);
+			light= BH_Read()/1.2;
+			light1=BH_Read()/1.2;
+    }
+}
+static void shidu_Task(void* parameter)
+{
+		while(1)
+		{
+			vTaskDelay(1000);
+		 shidu=Get_Adc_Average(1,10);
+		}
 
+}
 static void wifi_Task(void* parameter)
 {	  vTaskDelay(100);
 		ESP8266_Init();	
@@ -264,8 +313,10 @@ static void wifi_Task(void* parameter)
 	  while(1)
 	 {	
 		    if(++timeCount >= 500)								
-			{ UsartPrintf(USART_DEBUG, "EMQX_Publish\r\n");
-				sprintf(text,"{\"temp\":%d,\"humi\":%d,\"shidu\":%d,\"Light intensity\":%f,\"CO2\":%d}",p[2],p[0],shidu,LIght_Intensity(),CO2Data);
+			{ //UsartPrintf(USART_DEBUG, "EMQX_Publish\r\n");
+				sprintf(text,"{\"temp\":%d,\"humi\":%d,\"shidu\":%d,\"Light\":%.2f,\"CO2\":%d}",p[2],p[0],shidu,light,CO2Data);
+				printf("AB%dCD%dEF%dGH%dIJ%dK\r\n",p[2],p[0],shidu,light1,CO2Data);
+				//printf("temp:%d,humi:%d,shidu:%d,Light:%.2f,CO2:%d",p[2],p[0],shidu,light,CO2Data);
 				OneNet_Publish("username",text);
 				memset(text, 0, sizeof(text));
 			  timeCount = 0;
@@ -302,12 +353,12 @@ static void BSP_Init(void)
 	KEY_Init();
 	Adc_Init();
 
-	BH1750_Init();
-	i2c_CheckDevice(BH1750_Addr);
+	BH_Test();
+	Init_BH1750();
+	BH_send(0x11);//配置高分辨率模式
 	
 	SGP30_Init();
-	SGP30_Write(0x20,0x08);
-	sgp30_dat = SGP30_Read();//读取SGP30的值	
-	CO2Data = (sgp30_dat & 0xffff0000) >> 16;
+	
+	
 }
 /********************************END OF FILE****************************/

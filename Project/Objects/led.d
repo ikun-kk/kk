@@ -3,7 +3,7 @@
 .\objects\led.o: ..\SYSTEM\sys\sys.h
 .\objects\led.o: ..\User\stm32f10x.h
 .\objects\led.o: ..\CORE\core_cm3.h
-.\objects\led.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\led.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\objects\led.o: ..\User\system_stm32f10x.h
 .\objects\led.o: ..\User\stm32f10x_conf.h
 .\objects\led.o: ..\STM32F10x_FWLib\inc\stm32f10x_adc.h

@@ -3,7 +3,7 @@
 .\objects\delay.o: ..\SYSTEM\sys\sys.h
 .\objects\delay.o: ..\User\stm32f10x.h
 .\objects\delay.o: ..\CORE\core_cm3.h
-.\objects\delay.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\delay.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\objects\delay.o: ..\User\system_stm32f10x.h
 .\objects\delay.o: ..\User\stm32f10x_conf.h
 .\objects\delay.o: ..\STM32F10x_FWLib\inc\stm32f10x_adc.h
@@ -31,10 +31,10 @@
 .\objects\delay.o: ..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h
 .\objects\delay.o: ..\STM32F10x_FWLib\inc\misc.h
 .\objects\delay.o: ..\FreeRTOS\include\FreeRTOS.h
-.\objects\delay.o: D:\keil5\ARM\ARMCC\Bin\..\include\stddef.h
+.\objects\delay.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 .\objects\delay.o: ..\User\FreeRTOSConfig.h
 .\objects\delay.o: ..\SYSTEM\usart\usart.h
-.\objects\delay.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\delay.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\delay.o: ..\FreeRTOS\include\projdefs.h
 .\objects\delay.o: ..\FreeRTOS\include\portable.h
 .\objects\delay.o: ..\FreeRTOS\include\deprecated_definitions.h

@@ -34,7 +34,7 @@
 #include "FreeRTOS.h"
 #include <task.h>
 
-#define ESP8266_WIFI_INFO		"AT+CWJAP=\"888888\",\"liangtiancun\"\r\n"
+#define ESP8266_WIFI_INFO		"AT+CWJAP=\"HonorX30\",\"1233211234567\"\r\n"
 
 #define ESP8266_ONENET_INFO		"AT+CIPSTART=\"TCP\",\"47.236.24.248\",1883\r\n"
 
@@ -104,7 +104,7 @@ _Bool ESP8266_WaitRecive(void)
 //
 //	说明：		
 //==========================================================
-_Bool ESP8266_SendCmd(char *cmd, char *res)
+_Bool ESP8266_SendCmd(char *cmd, char *res)//单片机向wifi发送AT指令
 {
 	
 	unsigned char timeOut = 200;
@@ -142,7 +142,7 @@ _Bool ESP8266_SendCmd(char *cmd, char *res)
 //
 //	说明：		
 //==========================================================
-void ESP8266_SendData(unsigned char *data, unsigned short len)
+void ESP8266_SendData(unsigned char *data, unsigned short len)//单片机向wifi发送AT指令
 {
 
 	char cmdBuf[32];
@@ -168,7 +168,7 @@ void ESP8266_SendData(unsigned char *data, unsigned short len)
 //	说明：		不同网络设备返回的格式不同，需要去调试
 //				如ESP8266的返回格式为	"+IPD,x:yyy"	x代表数据长度，yyy是数据内容
 //==========================================================
-unsigned char *ESP8266_GetIPD(unsigned short timeOut)
+unsigned char *ESP8266_GetIPD(unsigned short timeOut)//对wifi收到的esp8266_buf数据进行解析。
 {
 
 	char *ptrIPD = NULL;
@@ -228,42 +228,31 @@ void ESP8266_Init(void)
 	GPIO_Initure.GPIO_Pin = GPIO_Pin_14;					//GPIOC14-复位
 	GPIO_Initure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(GPIOB, &GPIO_Initure);
-	
 	GPIO_WriteBit(GPIOB, GPIO_Pin_14, Bit_RESET);
-	//delay_ms(250);
-		vTaskDelay(250);
+	vTaskDelay(250);
 	GPIO_WriteBit(GPIOB, GPIO_Pin_14, Bit_SET);
-//	delay_ms(500);
-		vTaskDelay(500);
+	vTaskDelay(500);
 	ESP8266_Clear();
-	
 	UsartPrintf(USART_DEBUG, "0. AT\r\n");
 	while(ESP8266_SendCmd("AT\r\n", "OK"))
-		//delay_ms(500);
 	vTaskDelay(500);
 	UsartPrintf(USART_DEBUG, "1. RST\r\n");
 	ESP8266_SendCmd("AT+RST\r\n", "");
-	//delay_ms(500);
-		vTaskDelay(500);
+	vTaskDelay(500);
 	ESP8266_SendCmd("AT+CIPCLOSE\r\n", "");
-	//delay_ms(500);
 	vTaskDelay(500);
 	UsartPrintf(USART_DEBUG, "2. CWMODE\r\n");
 	while(ESP8266_SendCmd("AT+CWMODE=1\r\n", "OK"))
-		//delay_ms(500);
-		vTaskDelay(500);
+	vTaskDelay(500);
 	UsartPrintf(USART_DEBUG, "3. AT+CWDHCP\r\n");
 	while(ESP8266_SendCmd("AT+CWDHCP=1,1\r\n", "OK"))
-		//delay_ms(500);
 	vTaskDelay(500);
 	UsartPrintf(USART_DEBUG, "4. CWJAP\r\n");
 	while(ESP8266_SendCmd(ESP8266_WIFI_INFO, "GOT IP"))
-		//delay_ms(500);
 	vTaskDelay(500);
 	UsartPrintf(USART_DEBUG, "5. CIPSTART\r\n");
 	while(ESP8266_SendCmd(ESP8266_ONENET_INFO, "CONNECT"))
-		//delay_ms(500);
-		vTaskDelay(500);
+	vTaskDelay(500);
 	UsartPrintf(USART_DEBUG, "6. ESP8266 Init OK\r\n");
 
 }
@@ -279,7 +268,7 @@ void ESP8266_Init(void)
 //
 //	说明：		
 //==========================================================
-void USART2_IRQHandler(void)
+void USART2_IRQHandler(void)//wifi返回的数据存在esp8266_buf数组里
 {
 
 	if(USART_GetITStatus(USART2, USART_IT_RXNE) != RESET) //接收中断

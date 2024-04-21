@@ -18,5 +18,7 @@
 
 void LED_Init(void);//≥ı ºªØ
 
-		 				    
+int YL69DO(void);		  
+void pd7(void);
+
 #endif

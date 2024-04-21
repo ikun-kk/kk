@@ -1,7 +1,7 @@
 .\objects\main.o: ..\User\main.c
 .\objects\main.o: ..\FreeRTOS\include\FreeRTOS.h
-.\objects\main.o: D:\keil5\ARM\ARMCC\Bin\..\include\stddef.h
-.\objects\main.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\main.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+.\objects\main.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\objects\main.o: ..\User\FreeRTOSConfig.h
 .\objects\main.o: ..\User\stm32f10x.h
 .\objects\main.o: ..\CORE\core_cm3.h
@@ -32,7 +32,7 @@
 .\objects\main.o: ..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h
 .\objects\main.o: ..\STM32F10x_FWLib\inc\misc.h
 .\objects\main.o: ..\SYSTEM\usart\usart.h
-.\objects\main.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\main.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\main.o: ..\SYSTEM\sys\sys.h
 .\objects\main.o: ..\FreeRTOS\include\projdefs.h
 .\objects\main.o: ..\FreeRTOS\include\portable.h
@@ -51,6 +51,6 @@
 .\objects\main.o: ..\Connection\esp8266.h
 .\objects\main.o: ..\Connection\MqttKit.h
 .\objects\main.o: ..\Connection\Common.h
-.\objects\main.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdlib.h
+.\objects\main.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 .\objects\main.o: ..\Connection\onenet.h
 .\objects\main.o: ..\HARDWARE\GY-30\gy30.h

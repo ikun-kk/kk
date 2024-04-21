@@ -1,8 +1,8 @@
 .\objects\heap_4.o: ..\FreeRTOS\FreeRTOS port\MemMang\heap_4.c
-.\objects\heap_4.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdlib.h
+.\objects\heap_4.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 .\objects\heap_4.o: ..\FreeRTOS\include\FreeRTOS.h
-.\objects\heap_4.o: D:\keil5\ARM\ARMCC\Bin\..\include\stddef.h
-.\objects\heap_4.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\heap_4.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+.\objects\heap_4.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\objects\heap_4.o: ..\User\FreeRTOSConfig.h
 .\objects\heap_4.o: ..\User\stm32f10x.h
 .\objects\heap_4.o: ..\CORE\core_cm3.h
@@ -33,7 +33,7 @@
 .\objects\heap_4.o: ..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h
 .\objects\heap_4.o: ..\STM32F10x_FWLib\inc\misc.h
 .\objects\heap_4.o: ..\SYSTEM\usart\usart.h
-.\objects\heap_4.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\heap_4.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\heap_4.o: ..\SYSTEM\sys\sys.h
 .\objects\heap_4.o: ..\FreeRTOS\include\projdefs.h
 .\objects\heap_4.o: ..\FreeRTOS\include\portable.h

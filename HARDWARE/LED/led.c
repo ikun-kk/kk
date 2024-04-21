@@ -15,6 +15,8 @@
 
 //初始化PB5和PE5为输出口.并使能这两个口的时钟		    
 //LED IO初始化
+#define  mode           GPIO_ReadInputDataBit(GPIOD, GPIO_Pin_5)
+
 void LED_Init(void)
 {
  
@@ -34,3 +36,17 @@ void LED_Init(void)
 
 }
  
+int YL69DO()
+{
+  GPIO_InitTypeDef GPIO_InitStructure;
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD, ENABLE);
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+  GPIO_Init(GPIOD, &GPIO_InitStructure);
+	int a=mode;
+	return a;
+}
+
+
+

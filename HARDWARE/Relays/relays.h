@@ -5,5 +5,7 @@
 void relay_init(void);
 void relay_on(void);
 void relay_off(void);
+void soil_on(void);
+void soil_off(void);
 #define relays PBout(1)
 #endif

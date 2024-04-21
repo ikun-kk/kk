@@ -189,8 +189,7 @@ void SGP30_Init(void)
 {
   SGP30_GPIO_Init();
   SGP30_Write(0x20, 0x03);
-//	SGP30_ad_write(0x20,0x61);
-//	SGP30_ad_write(0x01,0x00);
+
 }
 
 

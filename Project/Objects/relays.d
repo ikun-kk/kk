@@ -1,7 +1,7 @@
 .\objects\relays.o: ..\HARDWARE\Relays\relays.c
 .\objects\relays.o: ..\FreeRTOS\include\FreeRTOS.h
-.\objects\relays.o: D:\keil5\ARM\ARMCC\Bin\..\include\stddef.h
-.\objects\relays.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\relays.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+.\objects\relays.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\objects\relays.o: ..\User\FreeRTOSConfig.h
 .\objects\relays.o: ..\User\stm32f10x.h
 .\objects\relays.o: ..\CORE\core_cm3.h
@@ -32,7 +32,7 @@
 .\objects\relays.o: ..\STM32F10x_FWLib\inc\stm32f10x_wwdg.h
 .\objects\relays.o: ..\STM32F10x_FWLib\inc\misc.h
 .\objects\relays.o: ..\SYSTEM\usart\usart.h
-.\objects\relays.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\relays.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\relays.o: ..\SYSTEM\sys\sys.h
 .\objects\relays.o: ..\FreeRTOS\include\projdefs.h
 .\objects\relays.o: ..\FreeRTOS\include\portable.h

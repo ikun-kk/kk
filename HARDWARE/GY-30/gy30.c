@@ -1,15 +1,18 @@
 #include "GY30.h"
  #include "FreeRTOS.h"
 #include <task.h>
-static void I2C_BH1750_GPIOConfig(void);
+/*
 
+	在访问I2C设备前，请先调用 i2c_CheckDevice() 检测I2C设备是否正常，该函数会配置GPIO
+
+*/
+static void I2C_GPIO_Config(void);
 
 /*
 *********************************************************************************************************
-*	函 数 名: i2c_Delay
-*	功能说明: I2C总线位延迟，最快400KHz
-*	形    参：无
-*	返 回 值: 无
+
+功能说明: I2C总线位延迟，最快400KHz
+
 *********************************************************************************************************
 */
 static void i2c_Delay(void)
@@ -38,18 +41,18 @@ static void i2c_Delay(void)
 void i2c_Start(void)
 {
 	/* 当SCL高电平时，SDA出现一个下跳沿表示I2C总线启动信号 */
-	BH1750_I2C_SDA_1();
-	BH1750_I2C_SCL_1();
+	SDA_H;
+	SCL_H;
 	i2c_Delay();
-	BH1750_I2C_SDA_0();
+	SDA_L;
 	i2c_Delay();
-	BH1750_I2C_SCL_0();
+	SCL_L;
 	i2c_Delay();
 }
 
 /*
 *********************************************************************************************************
-*	函 数 名: i2c_Start
+*	函 数 名: i2c_Stop
 *	功能说明: CPU发起I2C总线停止信号
 *	形    参：无
 *	返 回 值: 无
@@ -58,10 +61,10 @@ void i2c_Start(void)
 void i2c_Stop(void)
 {
 	/* 当SCL高电平时，SDA出现一个上跳沿表示I2C总线停止信号 */
-	BH1750_I2C_SDA_0();
-	BH1750_I2C_SCL_1();
+	SDA_L;
+	SCL_H;
 	i2c_Delay();
-	BH1750_I2C_SDA_1();
+	SDA_H;
 }
 
 /*
@@ -81,19 +84,19 @@ void i2c_SendByte(uint8_t _ucByte)
 	{		
 		if (_ucByte & 0x80)
 		{
-			BH1750_I2C_SDA_1();
+			SDA_H;
 		}
 		else
 		{
-			BH1750_I2C_SDA_0();
+			SDA_L;
 		}
 		i2c_Delay();
-		BH1750_I2C_SCL_1();
+		SCL_H;
 		i2c_Delay();	
-		BH1750_I2C_SCL_0();
+		SCL_L;
 		if (i == 7)
 		{
-			 BH1750_I2C_SDA_1(); // 释放总线
+			 SDA_H; // 释放总线
 		}
 		_ucByte <<= 1;	/* 左移一个bit */
 		i2c_Delay();
@@ -118,13 +121,13 @@ uint8_t i2c_ReadByte(void)
 	for (i = 0; i < 8; i++)
 	{
 		value <<= 1;
-		BH1750_I2C_SCL_1();
+		SCL_H;
 		i2c_Delay();
-		if (BH1750_I2C_SDA_READ())
+		if (SDA_read)
 		{
 			value++;
 		}
-		BH1750_I2C_SCL_0();
+		SCL_L;
 		i2c_Delay();
 	}
 	return value;
@@ -142,15 +145,19 @@ uint8_t i2c_WaitAck(void)
 {
 	uint8_t re;
 
-	BH1750_I2C_SDA_1();	/* CPU释放SDA总线 */
+	SDA_H;	/* CPU释放SDA总线 */
 	i2c_Delay();
-	BH1750_I2C_SCL_1();	/* CPU驱动SCL = 1, 此时器件会返回ACK应答 */
+	SCL_H;	/* CPU驱动SCL = 1, 此时器件会返回ACK应答 */
 	i2c_Delay();
-	if (BH1750_I2C_SDA_READ())	/* CPU读取SDA口线状态 */
+	if (SDA_read)	/* CPU读取SDA口线状态 */
+	{
 		re = 1;
+	}
 	else
+	{
 		re = 0;
-	BH1750_I2C_SCL_0();
+	}
+	SCL_L;
 	i2c_Delay();
 	return re;
 }
@@ -165,13 +172,13 @@ uint8_t i2c_WaitAck(void)
 */
 void i2c_Ack(void)
 {
-	BH1750_I2C_SDA_0();	/* CPU驱动SDA = 0 */
+	SDA_L;	/* CPU驱动SDA = 0 */
 	i2c_Delay();
-	BH1750_I2C_SCL_1();	/* CPU产生1个时钟 */
+	SCL_H;	/* CPU产生1个时钟 */
 	i2c_Delay();
-	BH1750_I2C_SCL_0();
+	SCL_L;
 	i2c_Delay();
-	BH1750_I2C_SDA_1();	/* CPU释放SDA总线 */
+	SDA_H;	/* CPU释放SDA总线 */
 }
 
 /*
@@ -184,35 +191,42 @@ void i2c_Ack(void)
 */
 void i2c_NAck(void)
 {
-	BH1750_I2C_SDA_1();	/* CPU驱动SDA = 1 */
+	SDA_H;	/* CPU驱动SDA = 1 */
 	i2c_Delay();
-	BH1750_I2C_SCL_1();	/* CPU产生1个时钟 */
+	SCL_H;	/* CPU产生1个时钟 */
 	i2c_Delay();
-	BH1750_I2C_SCL_0();
+	SCL_L;
 	i2c_Delay();	
 }
 
 /*
 *********************************************************************************************************
-*	函 数 名: I2C_BH1750_GPIOConfig
+*	函 数 名: i2c_Gpio_config
 *	功能说明: 配置I2C总线的GPIO，采用模拟IO的方式实现
 *	形    参：无
 *	返 回 值: 无
 *********************************************************************************************************
 */
-static void I2C_BH1750_GPIOConfig(void)
+static void I2C_GPIO_Config(void)
 {
-	GPIO_InitTypeDef GPIO_InitStructure;
-
-	RCC_APB2PeriphClockCmd(BH1750_RCC_I2C_PORT, ENABLE);	/* 打开GPIO时钟 */
-
-	GPIO_InitStructure.GPIO_Pin = BH1750_I2C_SCL_PIN | BH1750_I2C_SDA_PIN;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;  	/* 开漏输出 */
-	GPIO_Init(BH1750_GPIO_PORT_I2C, &GPIO_InitStructure);
+	GPIO_InitTypeDef  GPIO_InitStructure; 
+	
+	/*使能I2C使用的GPIO的时钟*/
+	RCC_APB2PeriphClockCmd(SCL_RCC_CLOCK | SDA_RCC_CLOCK,ENABLE);
+	
+	 /* I2C时钟、I2C数据*/
+  GPIO_InitStructure.GPIO_Pin = SCL_PIN;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;	       // 开漏输出
+  GPIO_Init(SCL_PORT, &GPIO_InitStructure);
+	
+  GPIO_InitStructure.GPIO_Pin = SDA_PIN;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;	       // 开漏输出
+  GPIO_Init(SDA_PORT, &GPIO_InitStructure); 
 
 	/* 给一个停止信号, 复位I2C总线上的所有设备到待机模式 */
-	i2c_Stop();
+	i2c_Stop();	
 }
 
 /*
@@ -227,85 +241,68 @@ uint8_t i2c_CheckDevice(uint8_t _Address)
 {
 	uint8_t ucAck;
 
-	I2C_BH1750_GPIOConfig();		/* 配置GPIO */
+	I2C_GPIO_Config();		/* 配置GPIO */
 
+	
 	i2c_Start();		/* 发送启动信号 */
 
 	/* 发送设备地址+读写控制bit（0 = w， 1 = r) bit7 先传 */
-	i2c_SendByte(_Address | BH1750_I2C_WR);
+	i2c_SendByte(_Address | I2C_WR);
 	ucAck = i2c_WaitAck();	/* 检测设备的ACK应答 */
-
 	i2c_Stop();			/* 发送停止信号 */
 
 	return ucAck;
 }
-//BH1750写一个字节
-//返回值	成功：0		失败：非0 
-uint8_t BH1750_Byte_Write(uint8_t data)
+//BH1750数据发送
+void BH_send(u8 send)
 {
+	do{
 	i2c_Start();
-	//发送写地址
-	i2c_SendByte(BH1750_Addr|0);
-	if(i2c_WaitAck()==1)
-		return 1;
-	//发送控制命令
-	i2c_SendByte(data);
-	if(i2c_WaitAck()==1)
-		return 2;
+	i2c_SendByte( SlaveAddress );
+	}while( i2c_WaitAck() );
+	i2c_SendByte(send);
+	i2c_WaitAck();
 	i2c_Stop();
-	return 0;
 }
 
-//BH1750读取测量数据
-//返回值 成功：返回光照强度 	失败：返回0
-uint16_t BH1750_Read_Measure(void)
+//BH1750数据读取
+
+uint16_t BH_Read()
 {
-	uint16_t receive_data=0; 
+	uint16_t GQ;
 	i2c_Start();
-	//发送读地址
-	i2c_SendByte(BH1750_Addr|1);
-	if(i2c_WaitAck()==1)
-		return 0;
-	//读取高八位
-	receive_data=i2c_ReadByte();
+	i2c_SendByte( 0x47 );
+	while(i2c_WaitAck());
+	GQ = i2c_ReadByte();
+	GQ = GQ << 8;
 	i2c_Ack();
-	//读取低八位
-	receive_data=(receive_data<<8)+i2c_ReadByte();
+	GQ += 0x00ff & i2c_ReadByte();      //读取并保存低八位数据
 	i2c_NAck();
 	i2c_Stop();
-	return receive_data;	//返回读取到的数据
-}
-
-
-//BH1750s上电
-void BH1750_Power_ON(void)
-{
-	BH1750_Byte_Write(POWER_ON);
-}
-
-//BH1750s断电
-void BH1750_Power_OFF(void)
-{
-	BH1750_Byte_Write(POWER_OFF);
-}
-
-//BH1750复位	仅在上电时有效
-void BH1750_RESET(void)
-{
-	BH1750_Byte_Write(MODULE_RESET);
+	return GQ;
 }
 
 //BH1750初始化
-void BH1750_Init(void)
+void Init_BH1750(void)
 {
-	BH1750_Power_ON();	//BH1750s上电
-	//BH1750_RESET();			//BH1750复位
-	BH1750_Byte_Write(Measure_Mode);
-	delay_ms(120);
+	//启动BH1750
+	BH_send(0x01);
+	printf("BH1750启动成功\n");
+	//清除BH1750的寄存器
+	BH_send(0x07);
+	printf("BH1750清除成功\n");
 }
 
-//获取光照强度
-float LIght_Intensity(void)
+
+//BH1750检测
+void BH_Test(void)
 {
-	return (float)(BH1750_Read_Measure()/1.2f*Resolurtion);
+	if(i2c_CheckDevice(0x46) == 1)
+  	{
+				printf("BH1750异常\n");
+    }
+	else
+    {
+        printf("BH1750正常\n");
+    }
 }

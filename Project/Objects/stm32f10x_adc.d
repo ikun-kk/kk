@@ -2,7 +2,7 @@
 .\objects\stm32f10x_adc.o: ..\STM32F10x_FWLib\inc\stm32f10x_adc.h
 .\objects\stm32f10x_adc.o: ..\User\stm32f10x.h
 .\objects\stm32f10x_adc.o: ..\CORE\core_cm3.h
-.\objects\stm32f10x_adc.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\stm32f10x_adc.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\objects\stm32f10x_adc.o: ..\User\system_stm32f10x.h
 .\objects\stm32f10x_adc.o: ..\User\stm32f10x_conf.h
 .\objects\stm32f10x_adc.o: ..\STM32F10x_FWLib\inc\stm32f10x_adc.h

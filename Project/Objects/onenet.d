@@ -1,7 +1,7 @@
 .\objects\onenet.o: ..\Connection\onenet.c
 .\objects\onenet.o: ..\User\stm32f10x.h
 .\objects\onenet.o: ..\CORE\core_cm3.h
-.\objects\onenet.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\onenet.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\objects\onenet.o: ..\User\system_stm32f10x.h
 .\objects\onenet.o: ..\User\stm32f10x_conf.h
 .\objects\onenet.o: ..\STM32F10x_FWLib\inc\stm32f10x_adc.h
@@ -32,11 +32,11 @@
 .\objects\onenet.o: ..\Connection\onenet.h
 .\objects\onenet.o: ..\Connection\mqttkit.h
 .\objects\onenet.o: ..\Connection\Common.h
-.\objects\onenet.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdlib.h
+.\objects\onenet.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
 .\objects\onenet.o: ..\SYSTEM\usart\usart.h
-.\objects\onenet.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\onenet.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\onenet.o: ..\SYSTEM\sys\sys.h
 .\objects\onenet.o: ..\SYSTEM\delay\delay.h
 .\objects\onenet.o: ..\HARDWARE\LED\led.h
-.\objects\onenet.o: D:\keil5\ARM\ARMCC\Bin\..\include\string.h
+.\objects\onenet.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 .\objects\onenet.o: ..\Connection\cJSON.h

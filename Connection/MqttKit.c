@@ -75,12 +75,9 @@ void MQTT_NewBuffer(MQTT_PACKET_STRUCTURE *mqttPacket, uint32 size)
 	else
 	{
 		mqttPacket->_memFlag = MEM_FLAG_STATIC;
-		
 		for(; i < mqttPacket->_size; i++)
 			mqttPacket->_data[i] = 0;
-		
 		mqttPacket->_len = 0;
-		
 		if(mqttPacket->_size < size)
 			mqttPacket->_data = NULL;
 	}
@@ -102,13 +99,12 @@ void MQTT_DeleteBuffer(MQTT_PACKET_STRUCTURE *mqttPacket)
 {
 
 	if(mqttPacket->_memFlag == MEM_FLAG_ALLOC)
-		MQTT_FreeBuffer(mqttPacket->_data);
-	
+	MQTT_FreeBuffer(mqttPacket->_data);
 	mqttPacket->_data = NULL;
 	mqttPacket->_len = 0;
 	mqttPacket->_size = 0;
 	mqttPacket->_memFlag = MEM_FLAG_NULL;
-
+	
 }
 
 int32 MQTT_DumpLength(size_t len, uint8 *buf)

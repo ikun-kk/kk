@@ -80,7 +80,7 @@ u16 Get_Adc_Average(u8 ch,u8 times)
 		delay_ms(5);
 	}
 	float temp_avrg=temp_val/times;
-	int shidu=(4095-temp_avrg)/1654*100;
+	int shidu=(4095-temp_avrg)/2245*100;
 	return shidu;
 } 	 
 

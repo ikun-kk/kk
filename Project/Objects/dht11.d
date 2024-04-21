@@ -2,7 +2,7 @@
 .\objects\dht11.o: ..\HARDWARE\DHT11\dht11.h
 .\objects\dht11.o: ..\User\stm32f10x.h
 .\objects\dht11.o: ..\CORE\core_cm3.h
-.\objects\dht11.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdint.h
+.\objects\dht11.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\objects\dht11.o: ..\User\system_stm32f10x.h
 .\objects\dht11.o: ..\User\stm32f10x_conf.h
 .\objects\dht11.o: ..\STM32F10x_FWLib\inc\stm32f10x_adc.h
@@ -32,9 +32,9 @@
 .\objects\dht11.o: ..\SYSTEM\delay\delay.h
 .\objects\dht11.o: ..\SYSTEM\sys\sys.h
 .\objects\dht11.o: ..\SYSTEM\usart\usart.h
-.\objects\dht11.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdio.h
+.\objects\dht11.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\dht11.o: ..\FreeRTOS\include\FreeRTOS.h
-.\objects\dht11.o: D:\keil5\ARM\ARMCC\Bin\..\include\stddef.h
+.\objects\dht11.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 .\objects\dht11.o: ..\User\FreeRTOSConfig.h
 .\objects\dht11.o: ..\FreeRTOS\include\projdefs.h
 .\objects\dht11.o: ..\FreeRTOS\include\portable.h
