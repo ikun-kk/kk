@@ -1,0 +1,10 @@
+debug/ap3216c.o
+debug/main.o
+debug/second.o
+debug/weather.o
+debug/widget.o
+debug/qrc_pic.o
+debug/moc_ap3216c.o
+debug/moc_second.o
+debug/moc_weather.o
+debug/moc_widget.o

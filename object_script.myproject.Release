@@ -1,0 +1,10 @@
+release/ap3216c.o
+release/main.o
+release/second.o
+release/weather.o
+release/widget.o
+release/qrc_pic.o
+release/moc_ap3216c.o
+release/moc_second.o
+release/moc_weather.o
+release/moc_widget.o
